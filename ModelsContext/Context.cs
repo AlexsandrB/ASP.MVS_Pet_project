@@ -1,7 +1,6 @@
 namespace ModelsContext
 {
     using ModelsContext.Models;
-    using System.Data.Entity;
 
     public class Context : DbContext
     {
