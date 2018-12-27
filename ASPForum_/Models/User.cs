@@ -11,5 +11,9 @@ namespace ASPForum_.Models
         public string Name { get; set; }
         public string About { get; set; }
         public string Login { get; set; }
+        public string Password { get; set; }
+
+        public List<Comment> Comments { get; set; }
+        public List<Topic> Topics { get; set; }
     }
 }

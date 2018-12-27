@@ -29,6 +29,29 @@ namespace ASPForum_.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            #region Entities Tables Naming
+            modelBuilder.Entity<Topic>().ToTable("Topics");
+            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<Comment>().ToTable("Coments");
+            #endregion Entities Tables Naming
+
+            #region Setting Entities DateTime2 ColumnType
+            modelBuilder.Entity<Topic>().Property(e => e.CreationDate).HasColumnType("datetime2");
+            modelBuilder.Entity<Comment>().Property(e => e.CreatedDate).HasColumnType("datetime2");
+            #endregion Setting Entities DateTime2 ColumnType
+
+            #region Creating Entities Relationships
+            modelBuilder.Entity<Topic>().HasMany(e => e.Comment).WithRequired(e => e.Topic).WillCascadeOnDelete(true);
+            modelBuilder.Entity<User>().HasMany(e => e.Topics).WithRequired(e => e.User).WillCascadeOnDelete(false);
+            modelBuilder.Entity<User>().HasMany(e => e.Comments).WithRequired(e => e.User).WillCascadeOnDelete(false);
+            #endregion Creating Entities Relationships
+        }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
