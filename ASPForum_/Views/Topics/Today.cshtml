@@ -1,0 +1,15 @@
+﻿@model ASPForum_.ViewModels.TodayTopicsViewModel
+
+@{
+    ViewBag.Title = "Today";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Today</h2>
+<ul>
+    @foreach (var topic in Model.Topics)
+    {
+        <li>@topic.Header</li>
+    }
+</ul>
+
