@@ -11,6 +11,11 @@ namespace ASPForum_.Models
         public string Header { get; set; }
         public string Description { get; set; }
         public DateTime CreationDate { get; set; }
+        /// <summary>
+        /// false = active, true = deleted
+        /// </summary>
+        public bool Deleted { get; set; }
+
         
         public List<Comment> Comment { get; set; }
         public int UserId { get; set; }

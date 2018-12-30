@@ -28,13 +28,13 @@ namespace ASPForum_.Controllers
                 new User() { Name = "user2" }
             };
 
-            var vm = new RendomTopicViewModel()
+            var viewModel = new RendomTopicViewModel()
             {
                 Topic = topic,
                 Users = users
             };
 
-            return View(vm);
+            return View(viewModel);
         }
 
         // GET: Topics/Today
@@ -43,18 +43,18 @@ namespace ASPForum_.Controllers
             List<Topic> topics = new List<Topic>();
             using (var context = ApplicationDbContext.Create())
             {
-                topics = context.Topics.Where(x => x.CreationDate.Year == DateTime.Now.Year 
+                topics = context.Topics.Where(x => x.CreationDate.Year == DateTime.Now.Year
                                                 && x.CreationDate.Month == DateTime.Now.Month
                                                 && x.CreationDate.Day == DateTime.Now.Day).ToList();
             }
 
-            TopicsListViewModel topicsVM = new TopicsListViewModel();
-            topicsVM.Topics = topics.Select(x => new TopicViewModel()
-                                                 {
-                                                     Header = x.Header,
-                                                 }).ToList();
+            TopicsListViewModel topicsListViewModel = new TopicsListViewModel();
+            topicsListViewModel.Topics = topics.Select(x => new TopicViewModel()
+            {
+                Header = x.Header,
+            }).ToList();
 
-            return View(topicsVM);
+            return View(topicsListViewModel);
         }
 
         // GET: Topics/All
@@ -66,13 +66,13 @@ namespace ASPForum_.Controllers
                 topics = context.Topics.ToList();
             }
 
-            TopicsListViewModel topicsVM = new TopicsListViewModel();
-            topicsVM.Topics = topics.Select(x => new TopicViewModel()
+            TopicsListViewModel topicsListViewModel = new TopicsListViewModel();
+            topicsListViewModel.Topics = topics.Where(x => x.Deleted).Select(x => new TopicViewModel()
             {
                 Header = x.Header,
             }).ToList();
 
-            return View(topicsVM);
+            return View(topicsListViewModel);
         }
 
         private void AddErrors(IdentityResult result)
@@ -83,6 +83,7 @@ namespace ASPForum_.Controllers
             }
         }
 
+        // POST: Topics/AddTopicBlank
         [HttpPost]
         public ActionResult AddTopicBlank(AddTopicModel model)
         {
@@ -95,14 +96,37 @@ namespace ASPForum_.Controllers
                     {
                         CreationDate = DateTime.Now,
                         Description = model.Description,
+                        Deleted = false,
                         Header = model.Header,
                         UserId = 1
                     });
+                    context.SaveChanges();
                 }
                 return RedirectToAction("Index", "Home");
             }
-            
+
             return View(model);
+        }
+
+        // Get: Topics/Delete/{id}
+        [Route("Topics/Delete/{id}")]
+        public ActionResult Delete(int id)
+        {
+            string result = "Topic successfully deleted"; 
+            using (ApplicationDbContext context = ApplicationDbContext.Create())
+            {
+                var topicToDelete = context.Topics.FirstOrDefault(x => x.Id == id);
+                if (topicToDelete == null)
+                {
+                    topicToDelete.Deleted = true;
+                }
+                else
+                {
+                    result = "Something goes wrong";
+                }
+                context.SaveChanges();
+            }
+            return Content(result);
         }
 
         [Route("topics/created/{year}/{month:regex(\\d{2}):range(1, 12)}/{day:regex(\\d):range(1, 31)}")]
