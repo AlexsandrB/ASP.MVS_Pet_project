@@ -1,6 +1,17 @@
 ﻿<ul>
     @foreach (var topic in Model.Topics)
     {
-        <li>@topic.Header</li>
+        <h3>@topic.Header</h3>
+        <div><h5>@topic.Description</h5></div>
+        <hr />
+        <div>
+            @Html.ActionLink("Comment", "Add", "Comments", new { topicHeader = topic.Header, topicId = topic.Id }, null)
+            @foreach (var comment in topic?.Comments)
+            {
+                <h5>@comment.CommentatorName</h5>
+                <h4>@comment.Content</h4>
+                <p>@comment.CreationDate</p>
+            }
+        </div>
     }
 </ul>

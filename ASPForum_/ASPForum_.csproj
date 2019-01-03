@@ -187,25 +187,24 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TopicsController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\CommentsAdministrationModels\AddCommentModel.cs" />
     <Compile Include="Models\HelpModels\ListModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\TopicsAdministrationModels\AddTopicModel.cs" />
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UsersAdministrationModels\AddUserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\RendomTopicViewModel.cs" />
+    <Compile Include="ViewModels\CommentViewModel.cs" />
     <Compile Include="ViewModels\TopicViewModel.cs" />
     <Compile Include="ViewModels\TopicsListViewModel.cs" />
     <Compile Include="ViewModels\UsersListViewModel.cs" />
@@ -267,16 +266,15 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Topics\Random.cshtml" />
     <Content Include="Views\Shared\_NavBar.cshtml" />
     <Content Include="Views\Topics\Today.cshtml" />
     <Content Include="Views\Shared\_Topics.cshtml" />
     <Content Include="Views\Topics\All.cshtml" />
-    <Content Include="Views\Topics\AddTopicBlank.cshtml" />
+    <Content Include="Views\Topics\Add.cshtml" />
+    <Content Include="Views\Comments\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

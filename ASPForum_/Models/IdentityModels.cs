@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -16,7 +17,11 @@ namespace ASPForum_.Models
             // Add custom user claims here
             return userIdentity;
         }
+        
+        public List<Topic> Topics { get; set; }
+        public List<Comment> Comments { get; set; }
     }
+    
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -26,7 +31,6 @@ namespace ASPForum_.Models
         }
 
         public DbSet<Topic> Topics { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
 
@@ -36,7 +40,6 @@ namespace ASPForum_.Models
 
             #region Entities Tables Naming
             modelBuilder.Entity<Topic>().ToTable("Topics");
-            modelBuilder.Entity<User>().ToTable("Users");
             modelBuilder.Entity<Comment>().ToTable("Coments");
             #endregion Entities Tables Naming
 
@@ -46,9 +49,9 @@ namespace ASPForum_.Models
             #endregion Setting Entities DateTime2 ColumnType
 
             #region Creating Entities Relationships
-            modelBuilder.Entity<Topic>().HasMany(e => e.Comment).WithRequired(e => e.Topic).WillCascadeOnDelete(true);
-            modelBuilder.Entity<User>().HasMany(e => e.Topics).WithRequired(e => e.User).WillCascadeOnDelete(false);
-            modelBuilder.Entity<User>().HasMany(e => e.Comments).WithRequired(e => e.User).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Topic>().HasMany(e => e.Comments).WithRequired(e => e.Topic).WillCascadeOnDelete(true);
+            modelBuilder.Entity<ApplicationUser>().HasMany(e => e.Topics).WithRequired(e => e.User).WillCascadeOnDelete(false);
+            modelBuilder.Entity<ApplicationUser>().HasMany(e => e.Comments).WithRequired(e => e.User).WillCascadeOnDelete(false);
             #endregion Creating Entities Relationships
         }
 

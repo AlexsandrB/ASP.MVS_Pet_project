@@ -12,30 +12,6 @@ namespace ASPForum_.Controllers
 {
     public class TopicsController : Controller
     {
-        // GET: Topics/Random
-        public ActionResult Random()
-        {
-            var topic = new Topic()
-            {
-                Description = "My first topic",
-                Header = "Hello world!",
-                CreationDate = DateTime.Now
-            };
-
-            var users = new List<User>
-            {
-                new User() { Name = "user1" },
-                new User() { Name = "user2" }
-            };
-
-            var viewModel = new RendomTopicViewModel()
-            {
-                Topic = topic,
-                Users = users
-            };
-
-            return View(viewModel);
-        }
 
         // GET: Topics/Today
         public ActionResult Today()
@@ -63,16 +39,38 @@ namespace ASPForum_.Controllers
             List<Topic> topics = new List<Topic>();
             using (var context = ApplicationDbContext.Create())
             {
-                topics = context.Topics.ToList();
+                topics = context.Topics.Where(x => !x.Deleted).ToList();
             }
 
-            TopicsListViewModel topicsListViewModel = new TopicsListViewModel();
-            topicsListViewModel.Topics = topics.Where(x => x.Deleted).Select(x => new TopicViewModel()
-            {
-                Header = x.Header,
-            }).ToList();
+            var topicsViewModel = new TopicsListViewModel();
+            topicsViewModel.Topics = new List<TopicViewModel>();
 
-            return View(topicsListViewModel);
+            topics.ForEach(x => 
+            {
+                var topicViewModel = new TopicViewModel()
+                {
+                    Header = x.Header,
+                    Id = x.Id,
+                    Description = x.Description,
+                    Comments = new List<CommentViewModel>()
+                };
+
+                using (var context = ApplicationDbContext.Create())
+                {
+                    topicViewModel.Comments = context.Comments
+                                                     .Where(q => q.TopicId == topicViewModel.Id && !q.Deleted)
+                                                     .Select(q => new CommentViewModel()
+                                                                  {
+                                                                      Content = q.Content,
+                                                                      CommentatorName = q.User.UserName,
+                                                                      CreationDate = q.CreatedDate
+                                                                  }).ToList();
+                }
+
+                topicsViewModel.Topics.Add(topicViewModel);
+            });
+
+            return View(topicsViewModel);
         }
 
         private void AddErrors(IdentityResult result)
@@ -83,12 +81,19 @@ namespace ASPForum_.Controllers
             }
         }
 
-        // POST: Topics/AddTopicBlank
+        // GET: Topics/Add
+        public ActionResult Add()
+        {
+            return View();
+        }
+
+        // POST: Topics/Add
         [HttpPost]
-        public ActionResult AddTopicBlank(AddTopicModel model)
+        public ActionResult Add(AddTopicModel model)
         {
             if (ModelState.IsValid)
             {
+                string CurrentUserId = HttpContext.User.Identity.GetUserId();
 
                 using (ApplicationDbContext context = ApplicationDbContext.Create())
                 {
@@ -98,7 +103,7 @@ namespace ASPForum_.Controllers
                         Description = model.Description,
                         Deleted = false,
                         Header = model.Header,
-                        UserId = 1
+                        UserId = CurrentUserId
                     });
                     context.SaveChanges();
                 }

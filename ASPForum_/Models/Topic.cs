@@ -17,8 +17,8 @@ namespace ASPForum_.Models
         public bool Deleted { get; set; }
 
         
-        public List<Comment> Comment { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public List<Comment> Comments { get; set; }
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }

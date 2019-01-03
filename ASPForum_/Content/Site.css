@@ -22,3 +22,12 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.topicDescription {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+.topicComments {
+    margin-left: 200px;
+    margin-top: 20px;
+}
