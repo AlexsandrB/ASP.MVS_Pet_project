@@ -7,6 +7,7 @@ namespace ASPForum_.Models
 {
     public class Comment
     {
+        
         public int Id { get; set; }
         public string Content { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -16,8 +17,8 @@ namespace ASPForum_.Models
         public bool Deleted { get; set; }
 
         public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
         public int TopicId { get; set; }
-        public Topic Topic { get; set; }
+        public virtual Topic Topic { get; set; }
     }
 }

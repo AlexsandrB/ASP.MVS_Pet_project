@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ASPForum_.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,13 +14,23 @@ namespace ASPForum_
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.Add(new Route("handler/{*path}", new CustomRouteHandler()));
+
             routes.MapMvcAttributeRoutes();
 
             routes.MapRoute(
                 "Default",
-                "{controller}/{action}/{id}",
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                "{controller}/{action}/{id}",   
+                new { controller = "Topics", action = "Today", id = UrlParameter.Optional }
             );
+        }
+        
+        class CustomRouteHandler : IRouteHandler
+        {
+            public IHttpHandler GetHttpHandler(RequestContext requestContext)
+            {
+                return new StatsModule();
+            }
         }
     }
 }

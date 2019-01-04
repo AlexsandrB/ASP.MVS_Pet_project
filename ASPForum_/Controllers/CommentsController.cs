@@ -53,7 +53,7 @@ namespace ASPForum_.Controllers
         public ActionResult Delete(int id)
         {
             string result = "Comment successfully deleted!";
-            string currentUserId = HttpContext.User.Identity.GetUserId();
+            var currentUserId = HttpContext.User.Identity.GetUserId();
             using (var context = ApplicationDbContext.Create())
             {
                 var commentToDelete = context.Comments.FirstOrDefault(x => x.Id == id);

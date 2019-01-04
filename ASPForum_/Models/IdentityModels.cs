@@ -2,6 +2,8 @@
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ASPForum_.Controllers;
+using ASPForum_.Models.Statistic;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -18,21 +20,22 @@ namespace ASPForum_.Models
             return userIdentity;
         }
         
-        public List<Topic> Topics { get; set; }
-        public List<Comment> Comments { get; set; }
+        public virtual List<Topic> Topics { get; set; }
+        public virtual List<Comment> Comments { get; set; }
+        public virtual UserReqStats Stats { get; set; }
     }
     
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("PetProjectDatabase", throwIfV1Schema: false)
         {
         }
 
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Comment> Comments { get; set; }
-
+        public DbSet<UserReqStats> Stats { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -41,6 +44,7 @@ namespace ASPForum_.Models
             #region Entities Tables Naming
             modelBuilder.Entity<Topic>().ToTable("Topics");
             modelBuilder.Entity<Comment>().ToTable("Coments");
+            modelBuilder.Entity<UserReqStats>().ToTable("Stats");
             #endregion Entities Tables Naming
 
             #region Setting Entities DateTime2 ColumnType
@@ -58,6 +62,14 @@ namespace ASPForum_.Models
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+    }
+
+    public class DbInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
+    {
+        public override void InitializeDatabase(ApplicationDbContext context)
+        {
+            base.InitializeDatabase(context);
         }
     }
 }
