@@ -12,15 +12,22 @@ namespace ASPForum_.Controllers
 {
     public class CommentsController : Controller
     {
-        
+
         // GET: Comments/Add
         public ActionResult Add(string topicHeader, int topicId)
         {
-            return View(new AddCommentModel()
+            if (HttpContext.User.Identity.IsAuthenticated)
             {
-                TopicHeader = topicHeader,
-                TopicId = topicId
-            });
+                return View(new AddCommentModel()
+                {
+                    TopicHeader = topicHeader,
+                    TopicId = topicId
+                });
+            }
+            else
+            {
+                return Redirect(HttpContext.Request.UrlReferrer.ToString());
+            }
         }
 
         // POST: Comments/Add

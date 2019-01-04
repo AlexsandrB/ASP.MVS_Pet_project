@@ -14,8 +14,6 @@ namespace ASPForum_
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.Add(new Route("handler/{*path}", new CustomRouteHandler()));
-
             routes.MapMvcAttributeRoutes();
 
             routes.MapRoute(
@@ -23,14 +21,6 @@ namespace ASPForum_
                 "{controller}/{action}/{id}",   
                 new { controller = "Topics", action = "Today", id = UrlParameter.Optional }
             );
-        }
-        
-        class CustomRouteHandler : IRouteHandler
-        {
-            public IHttpHandler GetHttpHandler(RequestContext requestContext)
-            {
-                return new StatsModule();
-            }
         }
     }
 }
